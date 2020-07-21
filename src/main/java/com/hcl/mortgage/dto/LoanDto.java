@@ -1,14 +1,11 @@
-package com.hcl.mortgage.entity;
+package com.hcl.mortgage.dto;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-public class Loan {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LoanDto {
+
 	private Integer loanId;
 	
 	private String loanType;
