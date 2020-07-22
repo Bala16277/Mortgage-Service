@@ -2,8 +2,6 @@ package com.hcl.mortgage.dto;
 
 import java.util.List;
 
-import com.hcl.mortgage.entity.Loan;
-
 public class MortgageResponseDto {
 
 	private String statusMessage;

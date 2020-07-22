@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.mortgage.dto.LoanDto;
-import com.hcl.mortgage.entity.Loan;
 import com.hcl.mortgage.service.LoanService;
 
 @RestController
@@ -24,6 +23,6 @@ public class LoanController {
 	public ResponseEntity<List<LoanDto>> getLoanList(@RequestParam int userId){
 		List<LoanDto> availableLoans = loanService.getLoanList(userId);
 		
-		return new ResponseEntity<List<LoanDto>>(availableLoans, HttpStatus.OK);
+		return new ResponseEntity<>(availableLoans, HttpStatus.OK);
 	}
 }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcl.mortgage.dto.LoanDto;
-//import com.hcl.mortgage.dto.LoanResponseDto;
 import com.hcl.mortgage.entity.Loan;
 import com.hcl.mortgage.entity.Property;
 import com.hcl.mortgage.entity.PropertyDetail;
