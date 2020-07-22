@@ -56,14 +56,18 @@ public class MortgageServiceImpl implements MortgageService {
 				.findByPropertyDetailId(mortgageRequestDto.getPropertyDetailId());
 		property.setPropertyDetail(propertyDetail);
 		property.setUser(user);
-		logger.info("user:::: " + user);
-		logger.info("property:" + property);
+		logger.info("User:::: " + user);
+		logger.info("Property:" + property);
+		logger.info("Info is saved into the user");
 		userRepository.save(user);
+		logger.info("Info is saved into the property");
 		propertyRepository.save(property);
 		double totalIncome = (user.getSalary() + user.getSecondIncome() + user.getOtherIncome());
-		logger.info("total income:::: " + totalIncome);
+		logger.info("Total Income:::: " + totalIncome);
 		double emiAmount = (40 * totalIncome) / 100;
-		logger.info("emi::: " + emiAmount);
+		logger.info("EMI::: " + emiAmount);
+		double totalPropertyValue = (property.getPropertyArea() * propertyDetail.getCost());
+		logger.info("Total Property Value:::: "+totalPropertyValue);
 		double loanAmount = ((80) * (property.getPropertyArea() * propertyDetail.getCost())) / 100;
 		logger.info("PropertyLaonAmount::: " + loanAmount);
 		List<Loan> loanList = loanRepository.findByLoanAmountLessThanEqualAndEmiAmountLessThanEqual(loanAmount,
