@@ -8,8 +8,6 @@ public class LoanDto {
 
 	private Integer loanId;
 	
-	private String loanType;
-	
 	private Double loanAmount;
 	
 	private Integer loanInterest;
@@ -24,14 +22,6 @@ public class LoanDto {
 
 	public void setLoanId(Integer loanId) {
 		this.loanId = loanId;
-	}
-
-	public String getLoanType() {
-		return loanType;
-	}
-
-	public void setLoanType(String loanType) {
-		this.loanType = loanType;
 	}
 
 
