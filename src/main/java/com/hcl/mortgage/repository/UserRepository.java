@@ -9,7 +9,9 @@ import com.hcl.mortgage.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-	
+
 	public Optional<User> findByUserId(Integer userId);
+
+	User getByUserId(int userId);
 
 }

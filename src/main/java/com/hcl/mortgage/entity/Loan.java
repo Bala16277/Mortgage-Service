@@ -19,7 +19,9 @@ public class Loan {
 	
 	private Integer loanTenure;
 	
+
 	private Double emiAmount;
+
 
 	public Integer getLoanId() {
 		return loanId;
@@ -62,12 +64,15 @@ public class Loan {
 		this.loanTenure = loanTenure;
 	}
 
+
 	public Double getEmiAmount() {
 		return emiAmount;
 	}
 
 	public void setEmiAmount(Double emiAmount) {
 		this.emiAmount = emiAmount;
+
+
 	}
 	
 }

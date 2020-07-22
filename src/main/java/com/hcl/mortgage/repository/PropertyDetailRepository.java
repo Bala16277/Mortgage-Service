@@ -6,8 +6,12 @@ import org.springframework.stereotype.Repository;
 import com.hcl.mortgage.entity.PropertyDetail;
 
 @Repository
+
 public interface PropertyDetailRepository extends JpaRepository<PropertyDetail, Integer> {
 
 	public PropertyDetail findByPropertyDetailId(Integer propertyDetailId);
 	
+	PropertyDetail getByPropertyDetailId(int userId);
+
+
 }
