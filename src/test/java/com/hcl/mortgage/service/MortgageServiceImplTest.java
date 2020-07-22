@@ -41,5 +41,6 @@ public class MortgageServiceImplTest {
 		mortgageRequestDto.setUserId(1);
 		
 		
+		
 	}
 }
