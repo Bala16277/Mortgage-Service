@@ -38,9 +38,9 @@ public class LoanService {
 	LoanRepository loanRepository;
 
 	public List<LoanDto> getLoanList(int userId) {
-
+		logger.info("User ID:::: "+userId);
 		User user = userRepository.getByUserId(userId);
-
+		logger.info("User:::: "+user);
 		double income = user.getSalary() + user.getSecondIncome() + user.getOtherIncome();
 
 		double emi = ((income) * 40) / 100;

@@ -35,7 +35,6 @@ public class LoanControllerTest {
 		loanDto.setEmiAmount(60000.00);
 		loanDto.setLoanInterest(8);
 		loanDto.setLoanTenure(15);
-		loanDto.setLoanType("home loan");
 		eligibleLoans.add(loanDto);
 		
 		ResponseEntity<List<LoanDto>> controllerRes = new ResponseEntity<List<LoanDto>>(eligibleLoans, HttpStatus.OK);
