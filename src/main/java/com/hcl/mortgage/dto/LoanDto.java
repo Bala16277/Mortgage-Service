@@ -1,19 +1,14 @@
 package com.hcl.mortgage.dto;
 
-
 public class LoanDto {
 
 	private Integer loanId;
-	
 
-	private String loanType;
-	
 	private Double loanAmount;
-	
+
 	private Integer loanInterest;
-	
+
 	private Integer loanTenure;
-	
 
 	private Double emiAmount;
 
@@ -24,15 +19,6 @@ public class LoanDto {
 	public void setLoanId(Integer loanId) {
 		this.loanId = loanId;
 	}
-
-	public String getLoanType() {
-		return loanType;
-	}
-
-	public void setLoanType(String loanType) {
-		this.loanType = loanType;
-	}
-
 
 	public Double getLoanAmount() {
 		return loanAmount;
@@ -58,7 +44,6 @@ public class LoanDto {
 		this.loanTenure = loanTenure;
 	}
 
-
 	public Double getEmiAmount() {
 		return emiAmount;
 	}
@@ -66,5 +51,5 @@ public class LoanDto {
 	public void setEmiAmount(Double emiAmount) {
 		this.emiAmount = emiAmount;
 	}
-	
+
 }

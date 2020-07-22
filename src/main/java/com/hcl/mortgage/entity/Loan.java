@@ -10,18 +10,14 @@ public class Loan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer loanId;
-	
-	private String loanType;
-	
+
 	private Double loanAmount;
-	
+
 	private Integer loanInterest;
-	
+
 	private Integer loanTenure;
-	
 
 	private Double emiAmount;
-
 
 	public Integer getLoanId() {
 		return loanId;
@@ -30,15 +26,6 @@ public class Loan {
 	public void setLoanId(Integer loanId) {
 		this.loanId = loanId;
 	}
-
-	public String getLoanType() {
-		return loanType;
-	}
-
-	public void setLoanType(String loanType) {
-		this.loanType = loanType;
-	}
-
 
 	public Double getLoanAmount() {
 		return loanAmount;
@@ -64,7 +51,6 @@ public class Loan {
 		this.loanTenure = loanTenure;
 	}
 
-
 	public Double getEmiAmount() {
 		return emiAmount;
 	}
@@ -72,7 +58,6 @@ public class Loan {
 	public void setEmiAmount(Double emiAmount) {
 		this.emiAmount = emiAmount;
 
-
 	}
-	
+
 }
