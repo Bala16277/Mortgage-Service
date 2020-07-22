@@ -26,6 +26,7 @@ public class MortgageController {
 	
 	@PostMapping("/apply")
 	public ResponseEntity<MortgageResponseDto> applyForLoan(@RequestBody MortgageRequestDto mortgageRequestDto) {
+		logger.info("inside apply method of mortgage controller");
 		MortgageResponseDto mortgageResponseDto;
 		mortgageResponseDto = mortgageService.applyForLoan(mortgageRequestDto);
 		return new ResponseEntity<>(mortgageResponseDto,HttpStatus.OK);
@@ -33,6 +34,7 @@ public class MortgageController {
 	
 	@PostMapping("/select")
 	public ResponseEntity<ResponseDto> selectLoan(@RequestParam Integer userId, @RequestParam Integer loanId) {
+		logger.info("inside select loan method of mortgage controller");
 		ResponseDto responseDto;
 		responseDto = mortgageService.selectLoan(userId, loanId);
 		return new ResponseEntity<>(responseDto,HttpStatus.OK);

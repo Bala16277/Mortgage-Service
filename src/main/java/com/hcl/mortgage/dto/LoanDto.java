@@ -1,19 +1,15 @@
 package com.hcl.mortgage.dto;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 public class LoanDto {
 
 	private Integer loanId;
-	
+
 	private Double loanAmount;
-	
+
 	private Integer loanInterest;
-	
+
 	private Integer loanTenure;
-	
+
 	private Double emiAmount;
 
 	public Integer getLoanId() {
@@ -23,7 +19,6 @@ public class LoanDto {
 	public void setLoanId(Integer loanId) {
 		this.loanId = loanId;
 	}
-
 
 	public Double getLoanAmount() {
 		return loanAmount;
@@ -56,5 +51,5 @@ public class LoanDto {
 	public void setEmiAmount(Double emiAmount) {
 		this.emiAmount = emiAmount;
 	}
-	
+
 }
