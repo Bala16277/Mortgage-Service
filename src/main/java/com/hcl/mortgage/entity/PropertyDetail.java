@@ -1,7 +1,15 @@
 package com.hcl.mortgage.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class PropertyDetail {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer propertyDetailId;
 
 	private Integer propertyPincode;
