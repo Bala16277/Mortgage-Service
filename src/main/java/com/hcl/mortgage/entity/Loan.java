@@ -1,5 +1,7 @@
 package com.hcl.mortgage.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,13 +12,13 @@ public class Loan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer loanId;
-	
+
 	private Double loanAmount;
-	
+
 	private Integer loanInterest;
-	
+
 	private Integer loanTenure;
-	
+
 	private Double emiAmount;
 
 	public Integer getLoanId() {
@@ -26,7 +28,6 @@ public class Loan {
 	public void setLoanId(Integer loanId) {
 		this.loanId = loanId;
 	}
-
 
 	public Double getLoanAmount() {
 		return loanAmount;
@@ -59,5 +60,20 @@ public class Loan {
 	public void setEmiAmount(Double emiAmount) {
 		this.emiAmount = emiAmount;
 	}
-	
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object)
+			return true;
+		if (!(object instanceof Loan))
+			return false;
+		Loan loan = (Loan) object;
+		return Objects.equals(getLoanId(), loan.getLoanId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getLoanId());
+	}
+
 }

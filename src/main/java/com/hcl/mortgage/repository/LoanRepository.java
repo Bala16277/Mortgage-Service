@@ -15,4 +15,6 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
 	
 	public Optional<Loan> findByLoanId(Integer loanId);
 	
+	public Loan getByLoanId(Integer loanId);
+	
 }
