@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.hcl.mortgage.config.ApplicationConstants;
 import com.hcl.mortgage.dto.LoanDto;
 import com.hcl.mortgage.dto.MortgageRequestDto;
 import com.hcl.mortgage.dto.MortgageResponseDto;
@@ -19,11 +20,20 @@ import com.hcl.mortgage.entity.Property;
 import com.hcl.mortgage.entity.PropertyDetail;
 import com.hcl.mortgage.entity.User;
 import com.hcl.mortgage.entity.UserLoan;
+import com.hcl.mortgage.exception.LoanNotValidException;
+import com.hcl.mortgage.exception.UserNotFoundException;
 import com.hcl.mortgage.repository.LoanRepository;
 import com.hcl.mortgage.repository.PropertyDetailRepository;
 import com.hcl.mortgage.repository.PropertyRepository;
 import com.hcl.mortgage.repository.UserLoanRepository;
 import com.hcl.mortgage.repository.UserRepository;
+
+/**
+ * @author Bala
+ * @since 21-07-2020
+ * @implNote This is a implementation of MortgageService
+ * @implSpec java8 and spring jpa
+ */
 
 @Service
 public class MortgageServiceImpl implements MortgageService {
@@ -44,6 +54,12 @@ public class MortgageServiceImpl implements MortgageService {
 
 	@Autowired
 	UserLoanRepository userLoanRepository;
+	
+	/**
+	 * @param mortgageRequestDto the details required from the user
+	 * @return MortgageResponseDto the response whether user applied for a loan or not
+	 * @since 21-07-2020
+	 */
 
 	public MortgageResponseDto applyForLoan(MortgageRequestDto mortgageRequestDto) {
 		MortgageResponseDto mortgageResponseDto = new MortgageResponseDto();
@@ -62,17 +78,34 @@ public class MortgageServiceImpl implements MortgageService {
 		userRepository.save(user);
 		logger.info("Info is saved into the property");
 		propertyRepository.save(property);
+		List<LoanDto> loanDtos = getApplicableLoanList(user.getUserId());
+		mortgageResponseDto.setStatusMessage(ApplicationConstants.APPLICABLE_LOAN);
+		mortgageResponseDto.setStatusCode(HttpStatus.OK.value());
+		mortgageResponseDto.setLoanList(loanDtos);
+		return mortgageResponseDto;
+	}
 
+	/**
+	 * This is a method for getting applicable loans for which user can apply
+	 * @param userId Need userId to get a list of applicable loans
+	 * @return list of applicable laons
+	 */
+	public List<LoanDto> getApplicableLoanList(Integer userId) {
+
+		User user = userRepository.getByUserId(userId);
+		Property property = propertyRepository.getByUser(user);
+		PropertyDetail propertyDetail = property.getPropertyDetail();
 		double totalIncome = (user.getSalary() + user.getSecondIncome() + user.getOtherIncome());
 		logger.info("Total Income:::: " + totalIncome);
-		double emiAmount = (40 * totalIncome) / 100;
+		double emiAmount = ApplicationConstants.EMI_PERCENT * totalIncome;
 		logger.info("EMI::: " + emiAmount);
-		logger.info("property object: "+property);
-		logger.info("area "+property.getPropertyArea());
-		logger.info("area cost: "+propertyDetail.getCost());
+		logger.info("property object: " + property);
+		logger.info("area " + property.getPropertyArea());
+		logger.info("area cost: " + propertyDetail.getCost());
 		double totalPropertyValue = (property.getPropertyArea() * propertyDetail.getCost());
 		logger.info("Total Property Value:::: " + totalPropertyValue);
-		double loanAmount = ((80) * (property.getPropertyArea() * propertyDetail.getCost())) / 100;
+		double loanAmount = ApplicationConstants.PROPERTY_PERCENT
+				* (property.getPropertyArea() * propertyDetail.getCost());
 		logger.info("PropertyLaonAmount::: " + loanAmount);
 		List<Loan> loanList = loanRepository.findByLoanAmountLessThanEqualAndEmiAmountLessThanEqual(loanAmount,
 				emiAmount);
@@ -83,39 +116,54 @@ public class MortgageServiceImpl implements MortgageService {
 			BeanUtils.copyProperties(loan, loanDto);
 			loanDtos.add(loanDto);
 		}
-		mortgageResponseDto.setStatusMessage("The list of applicable loans for the user is: ");
-		mortgageResponseDto.setStatusCode(HttpStatus.OK.value());
-		mortgageResponseDto.setLoanList(loanDtos);
-		return mortgageResponseDto;
+		return loanDtos;
 	}
 
-	public ResponseDto selectLoan(Integer userId, Integer loanId) {
+	/**
+	 * @param userId Need a user and we need to check user is present in db or not	
+	 * @param loanId To get the valid loan
+	 * @return ResponseDto to return the response
+	 * @throws LoanNotValidException if loanId is not a valid loan for that user
+	 * @throws UserNotFoundException if userId is not present in the database
+	 */
+	
+	public ResponseDto selectLoan(Integer userId, Integer loanId) throws LoanNotValidException, UserNotFoundException {
 		logger.info("inside select a loan method:::: ");
+
 		ResponseDto responseDto = new ResponseDto();
 		Optional<User> users = userRepository.findByUserId(userId);
+		logger.info("user object: " + users);
+		
 		UserLoan userLoan = new UserLoan();
-
 		if (users.isPresent()) {
 			User user = users.get();
-			userLoan.setUser(user);
+			List<Loan> loanList = new ArrayList<>();
+			List<LoanDto> listDtos = getApplicableLoanList(user.getUserId());
+			Loan loan1 = loanRepository.getByLoanId(loanId);
+			for (LoanDto loanDto : listDtos) {
+				Loan loan = new Loan();
+				BeanUtils.copyProperties(loanDto, loan);
+				loanList.add(loan);
+			}
+			if (userLoanRepository.findByUserAndLoan(user, loan1).isPresent()) {
+				responseDto.setStatusMessage(ApplicationConstants.USER_ALREADY_APPLIED);
+				responseDto.setStatusCode(HttpStatus.OK.value());
+				return responseDto;
+			} else if (loanList.contains(loan1)) {
+				userLoan.setUser(user);
+				userLoan.setLoan(loan1);
+				logger.info("userLoan: " + userLoan);
+				userLoanRepository.save(userLoan);
+				responseDto.setStatusMessage(ApplicationConstants.LOAN_APPLY_SUCCESS);
+				responseDto.setStatusCode(HttpStatus.OK.value());
+				return responseDto;
+			} else {
+				throw new LoanNotValidException(ApplicationConstants.LOAN_NOT_APPLICABLE);
+			}
 		} else {
-			responseDto.setStatusMessage("User does not exist");
-			responseDto.setStatusCode(HttpStatus.NOT_FOUND.value());
-			return responseDto;
-		}
-		Optional<Loan> loans = loanRepository.findByLoanId(loanId);
-		if (loans.isPresent()) {
-			Loan loan = loans.get();
-			userLoan.setLoan(loan);
-		} else {
-			responseDto.setStatusMessage("Not a valid loan");
-			responseDto.setStatusCode(HttpStatus.NOT_FOUND.value());
-			return responseDto;
-		}
-		userLoanRepository.save(userLoan);
-		responseDto.setStatusMessage("User has selected a loan");
-		responseDto.setStatusCode(HttpStatus.OK.value());
-		return responseDto;
-	}
 
+			throw new UserNotFoundException(ApplicationConstants.USER_NOT_FOUND);
+		}
+
+	}
 }

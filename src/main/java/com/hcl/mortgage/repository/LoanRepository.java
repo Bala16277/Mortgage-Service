@@ -15,6 +15,8 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
 	public List<Loan> findByLoanAmountLessThanEqualAndEmiAmountLessThanEqual(Double loanAmount, Double emiAmount);
 	
 	public Optional<Loan> findByLoanId(Integer loanId);
+
+	public Loan getByLoanId(Integer loanId);
 	
 
 }

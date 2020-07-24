@@ -1,5 +1,7 @@
 package com.hcl.mortgage.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,5 +61,22 @@ public class Loan {
 		this.emiAmount = emiAmount;
 
 	}
+
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object)
+			return true;
+		if (!(object instanceof Loan))
+			return false;
+		Loan loan = (Loan) object;
+		return Objects.equals(getLoanId(), loan.getLoanId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getLoanId());
+	}
+
 
 }

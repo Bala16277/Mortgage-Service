@@ -3,6 +3,7 @@ package com.hcl.mortgage.service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.junit.Assert;
@@ -23,6 +24,7 @@ import com.hcl.mortgage.entity.Loan;
 import com.hcl.mortgage.entity.Property;
 import com.hcl.mortgage.entity.PropertyDetail;
 import com.hcl.mortgage.entity.User;
+import com.hcl.mortgage.entity.UserLoan;
 import com.hcl.mortgage.repository.LoanRepository;
 import com.hcl.mortgage.repository.PropertyDetailRepository;
 import com.hcl.mortgage.repository.PropertyRepository;
@@ -165,6 +167,7 @@ public class MortgageServiceImplTest {
 		} catch(Exception e) {
 			e.getMessage();
 		}
+		user.setUserId(2);
 		user.setEmail("bala@gmail.com");
 		user.setGender("male");
 		user.setOtherIncome(5000.00);
@@ -174,8 +177,14 @@ public class MortgageServiceImplTest {
 		user.setSalary(30000.00);
 		user.setSecondIncome(10000.00);
 		user.setUserName("bala");
-		responseDto.setStatusMessage("User successfully selected an offer");
-//		Mockito.when(userRepository.findByUserId(1)).thenReturn(Optional<User>));
+		
+		Mockito.when(userRepository.findByUserId(2)).thenReturn(Optional.of(user));
+		UserLoan userLoan = new UserLoan();
+		if(user!=null) {
+			userLoan.setUser(user);
+		}
+		
+		
 		Assert.assertNotNull(responseDto);
 	}
 }
